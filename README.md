@@ -1,11 +1,8 @@
-## My Project
+## OpenSearch System Templates
 
-TODO: Fill this README out!
-
-Be sure to:
-
-* Change the title in this README
-* Edit your repository description on GitHub
+The repository is a plugin which acts as a repository for system templates which should be loaded as part of the cluster setup.
+These contain application based configuration templates which are used to provide sensible defaults for various use-cases 
+for which users may be using OpenSearch.
 
 ## Security
 
