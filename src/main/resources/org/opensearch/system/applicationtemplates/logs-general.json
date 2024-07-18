@@ -1,0 +1,14 @@
+{
+  "template": {
+    "settings": {
+      "codec": "best_compression",
+      "merge.policy": "log_byte_size",
+      "refresh_interval": "60s"
+    }
+  },
+  "_meta": {
+    "_type": "@abc_template",
+    "_version": 1
+  },
+  "version": 1
+}

@@ -92,9 +92,6 @@ opensearchplugin {
 }
 
 dependencies {
-    implementation "org.opensearch:opensearch-common:${opensearch_version}"
-    implementation "org.opensearch:opensearch-core:${opensearch_version}"
-    implementation "org.opensearch:opensearch-x-content:${opensearch_version}"
 }
 
 allprojects {

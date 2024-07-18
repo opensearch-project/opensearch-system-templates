@@ -1,0 +1,15 @@
+{
+  "repository_schema_version": 1,
+  "templates": [
+      {
+        "name": "logs-general",
+        "version": 1,
+        "type": "@abc_template"
+      },
+      {
+        "name": "metrics-general",
+        "version": 1,
+        "type": "@abc_template"
+      }
+  ]
+}
