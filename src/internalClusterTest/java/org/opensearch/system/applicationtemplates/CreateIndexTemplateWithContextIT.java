@@ -35,8 +35,6 @@ public class CreateIndexTemplateWithContextIT extends OpenSearchIntegTestCase {
     public void testCreateIndexTemplateWithContext() throws Exception {
         internalCluster().ensureAtLeastNumDataNodes(1);
 
-        Thread.sleep(10000);
-
         client().admin()
             .indices()
             .execute(GetComponentTemplateAction.INSTANCE, new GetComponentTemplateAction.Request())
@@ -59,7 +57,7 @@ public class CreateIndexTemplateWithContextIT extends OpenSearchIntegTestCase {
                         null,
                         null,
                         null,
-                        new Context("logs-general", "_latest", Map.of())
+                        new Context("logs", "_latest", Map.of())
                     )
                 )
             )
@@ -84,7 +82,6 @@ public class CreateIndexTemplateWithContextIT extends OpenSearchIntegTestCase {
         return Settings.builder()
             .put(baseSettings)
             .put("cluster.application_templates.enabled", true)
-            .put("logger.org.opensearch", "DEBUG")
             .build();
     }
 }

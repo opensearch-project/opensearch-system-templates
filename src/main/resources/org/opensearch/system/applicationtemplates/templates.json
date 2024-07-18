@@ -2,12 +2,12 @@
   "repository_schema_version": 1,
   "templates": [
       {
-        "name": "logs-general",
+        "name": "logs",
         "version": 1,
         "type": "@abc_template"
       },
       {
-        "name": "metrics-general",
+        "name": "metrics",
         "version": 1,
         "type": "@abc_template"
       }

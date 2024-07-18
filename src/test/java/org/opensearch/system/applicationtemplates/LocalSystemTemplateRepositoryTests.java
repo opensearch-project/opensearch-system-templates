@@ -8,20 +8,18 @@
 
 package org.opensearch.system.applicationtemplates;
 
+import org.opensearch.cluster.applicationtemplates.SystemTemplate;
 import org.opensearch.cluster.applicationtemplates.SystemTemplateMetadata;
 import org.opensearch.cluster.applicationtemplates.SystemTemplateRepository;
 import org.opensearch.cluster.applicationtemplates.TemplateRepositoryMetadata;
 import org.opensearch.test.OpenSearchTestCase;
 
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class LocalSystemTemplateRepositoryTests extends OpenSearchTestCase {
-
-    private List<SystemTemplateMetadata> templateMetadataList = List.of(
-        SystemTemplateMetadata.fromComponentTemplateInfo("logs-general", 1L),
-        SystemTemplateMetadata.fromComponentTemplateInfo("metrics-general", 1L)
-    );
 
     public void testRepositoryMetadata() throws Exception {
         try (SystemTemplateRepository repository = new LocalSystemTemplateRepository()) {
@@ -37,7 +35,6 @@ public class LocalSystemTemplateRepositoryTests extends OpenSearchTestCase {
             AtomicInteger counter = new AtomicInteger();
             repository.listTemplates().forEach(templateMetadata -> {
                 counter.incrementAndGet();
-
             });
 
             assertEquals(counter.get(), 2);
@@ -46,10 +43,16 @@ public class LocalSystemTemplateRepositoryTests extends OpenSearchTestCase {
 
     public void testRepositoryGetTemplate() throws Exception {
         try (SystemTemplateRepository repository = new LocalSystemTemplateRepository()) {
-            AtomicInteger counter = new AtomicInteger();
-            repository.listTemplates().forEach(templateMetadata -> counter.incrementAndGet());
+            for (SystemTemplateMetadata templateMetadata : repository.listTemplates()) {
+                SystemTemplate template = repository.getTemplate(templateMetadata);
+                assertEquals(templateMetadata, template.templateMetadata());
+                assertNotNull(template.templateContent());
 
-            assertEquals(counter.get(), 2);
+                try (InputStream is = this.getClass().getResourceAsStream(LocalSystemTemplateRepository.buildFileName(templateMetadata))) {
+                    String expectedTemplateContent = new String(is.readAllBytes(), StandardCharsets.UTF_8);
+                    assertEquals(template.templateContent().utf8ToString(), expectedTemplateContent);
+                }
+            }
         }
     }
 }

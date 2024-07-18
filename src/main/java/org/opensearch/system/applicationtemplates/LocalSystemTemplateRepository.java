@@ -13,7 +13,6 @@ import org.apache.logging.log4j.Logger;
 import org.opensearch.cluster.applicationtemplates.SystemTemplate;
 import org.opensearch.cluster.applicationtemplates.SystemTemplateMetadata;
 import org.opensearch.cluster.applicationtemplates.SystemTemplateRepository;
-import org.opensearch.cluster.applicationtemplates.SystemTemplatesService;
 import org.opensearch.cluster.applicationtemplates.TemplateRepositoryMetadata;
 import org.opensearch.common.util.io.Streams;
 import org.opensearch.common.xcontent.json.JsonXContent;
@@ -24,6 +23,7 @@ import org.opensearch.core.xcontent.NamedXContentRegistry;
 import org.opensearch.core.xcontent.XContentParser;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -34,7 +34,7 @@ import java.util.List;
  */
 public class LocalSystemTemplateRepository implements SystemTemplateRepository {
 
-    private static final Logger logger = LogManager.getLogger(SystemTemplatesService.class);
+    private static final Logger logger = LogManager.getLogger(LocalSystemTemplateRepository.class);
 
     static final String REPOSITORY_ID = "__core__";
     static final long CURRENT_REPO_VERSION = 1L;
@@ -69,7 +69,6 @@ public class LocalSystemTemplateRepository implements SystemTemplateRepository {
                         "Format of template metadata file does not match expected format" + listParser.currentToken()
                     );
                 }
-                ;
                 String templateName = null;
                 String templateType = null;
                 long templateVersion = 0L;
@@ -84,12 +83,22 @@ public class LocalSystemTemplateRepository implements SystemTemplateRepository {
                             templateName = listParser.text();
                         } else if ("type".equals(name)) {
                             templateType = listParser.text();
+                        } else {
+                            throw new IllegalArgumentException("Unexpected token " + currentToken);
                         }
                     } else if (currentToken == XContentParser.Token.VALUE_NUMBER) {
-                        templateVersion = listParser.longValue();
+                        if ("version".equals(name)) {
+                            templateVersion = listParser.longValue();
+                        } else {
+                            throw new IllegalArgumentException("Unexpected token " + currentToken);
+                        }
                     } else {
                         throw new IllegalArgumentException("Unexpected token " + currentToken);
                     }
+                }
+                if (templateName == null || templateType == null | templateVersion == 0L) {
+                    throw new IllegalArgumentException("Could not read template metadata: [name: " + templateName +
+                            " , type: " + templateType + " , version: " + templateVersion);
                 }
                 templateMetadataList.add(new SystemTemplateMetadata(templateVersion, templateType, templateName));
             }
@@ -101,7 +110,8 @@ public class LocalSystemTemplateRepository implements SystemTemplateRepository {
 
     @Override
     public SystemTemplate getTemplate(SystemTemplateMetadata templateMetadata) throws IOException {
-        String fileName = templateMetadata.name() + ".json";
+        final String fileName = buildFileName(templateMetadata);
+        logger.debug("Loading {} from file: {}", templateMetadata, fileName);
         try (InputStream is = getResourceAsStream(fileName)) {
             if (is != null) {
                 final ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -114,12 +124,16 @@ public class LocalSystemTemplateRepository implements SystemTemplateRepository {
         }
     }
 
+    public static String buildFileName(SystemTemplateMetadata templateMetadata) {
+        return "v" + templateMetadata.version() + File.separator + templateMetadata.name() + ".json";
+    }
+
+    // Visible for testing (if we need UTs with mocked resources)
     protected InputStream getResourceAsStream(String name) throws IOException {
         return LocalSystemTemplateRepository.class.getResourceAsStream(name);
     }
 
     @Override
     public void close() throws IOException {
-
     }
 }
