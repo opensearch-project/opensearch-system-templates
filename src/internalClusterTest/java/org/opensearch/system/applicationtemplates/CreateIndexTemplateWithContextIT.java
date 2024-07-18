@@ -79,9 +79,6 @@ public class CreateIndexTemplateWithContextIT extends OpenSearchIntegTestCase {
     @Override
     protected Settings nodeSettings(int nodeOrdinal) {
         Settings baseSettings = super.nodeSettings(nodeOrdinal);
-        return Settings.builder()
-            .put(baseSettings)
-            .put("cluster.application_templates.enabled", true)
-            .build();
+        return Settings.builder().put(baseSettings).put("cluster.application_templates.enabled", true).build();
     }
 }

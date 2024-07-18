@@ -16,7 +16,6 @@ import org.opensearch.test.OpenSearchTestCase;
 
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class LocalSystemTemplateRepositoryTests extends OpenSearchTestCase {
@@ -33,9 +32,7 @@ public class LocalSystemTemplateRepositoryTests extends OpenSearchTestCase {
     public void testRepositoryListTemplates() throws Exception {
         try (SystemTemplateRepository repository = new LocalSystemTemplateRepository()) {
             AtomicInteger counter = new AtomicInteger();
-            repository.listTemplates().forEach(templateMetadata -> {
-                counter.incrementAndGet();
-            });
+            repository.listTemplates().forEach(templateMetadata -> { counter.incrementAndGet(); });
 
             assertEquals(counter.get(), 2);
         }

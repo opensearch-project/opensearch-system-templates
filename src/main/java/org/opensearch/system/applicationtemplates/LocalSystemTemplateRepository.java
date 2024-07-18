@@ -97,8 +97,14 @@ public class LocalSystemTemplateRepository implements SystemTemplateRepository {
                     }
                 }
                 if (templateName == null || templateType == null | templateVersion == 0L) {
-                    throw new IllegalArgumentException("Could not read template metadata: [name: " + templateName +
-                            " , type: " + templateType + " , version: " + templateVersion);
+                    throw new IllegalArgumentException(
+                        "Could not read template metadata: [name: "
+                            + templateName
+                            + " , type: "
+                            + templateType
+                            + " , version: "
+                            + templateVersion
+                    );
                 }
                 templateMetadataList.add(new SystemTemplateMetadata(templateVersion, templateType, templateName));
             }
@@ -134,6 +140,5 @@ public class LocalSystemTemplateRepository implements SystemTemplateRepository {
     }
 
     @Override
-    public void close() throws IOException {
-    }
+    public void close() throws IOException {}
 }
