@@ -10,7 +10,6 @@ package org.opensearch.system.applicationtemplates;
 
 import org.opensearch.action.admin.indices.create.CreateIndexRequest;
 import org.opensearch.action.admin.indices.get.GetIndexRequest;
-import org.opensearch.action.admin.indices.template.get.GetComponentTemplateAction;
 import org.opensearch.action.admin.indices.template.put.PutComposableIndexTemplateAction;
 import org.opensearch.cluster.metadata.ComposableIndexTemplate;
 import org.opensearch.cluster.metadata.Context;
@@ -35,14 +34,6 @@ public class CreateIndexTemplateWithContextIT extends OpenSearchIntegTestCase {
     public void testCreateIndexTemplateWithContext() throws Exception {
         internalCluster().ensureAtLeastNumDataNodes(1);
 
-        client().admin()
-            .indices()
-            .execute(GetComponentTemplateAction.INSTANCE, new GetComponentTemplateAction.Request())
-            .actionGet()
-            .getComponentTemplates()
-            .forEach((k, v) -> {
-                System.out.println("COMPONENT TEMPLATE::: " + k);
-            });
         // Add context to an index template
         client().admin()
             .indices()

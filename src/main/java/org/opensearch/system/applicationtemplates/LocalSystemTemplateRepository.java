@@ -14,6 +14,7 @@ import org.opensearch.cluster.applicationtemplates.SystemTemplate;
 import org.opensearch.cluster.applicationtemplates.SystemTemplateMetadata;
 import org.opensearch.cluster.applicationtemplates.SystemTemplateRepository;
 import org.opensearch.cluster.applicationtemplates.TemplateRepositoryMetadata;
+import org.opensearch.common.io.PathUtils;
 import org.opensearch.common.util.io.Streams;
 import org.opensearch.common.xcontent.json.JsonXContent;
 import org.opensearch.core.common.bytes.BytesArray;
@@ -23,7 +24,6 @@ import org.opensearch.core.xcontent.NamedXContentRegistry;
 import org.opensearch.core.xcontent.XContentParser;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -96,7 +96,7 @@ public class LocalSystemTemplateRepository implements SystemTemplateRepository {
                         throw new IllegalArgumentException("Unexpected token " + currentToken);
                     }
                 }
-                if (templateName == null || templateType == null | templateVersion == 0L) {
+                if (templateName == null || templateType == null || templateVersion == 0L) {
                     throw new IllegalArgumentException(
                         "Could not read template metadata: [name: "
                             + templateName
@@ -130,8 +130,8 @@ public class LocalSystemTemplateRepository implements SystemTemplateRepository {
         }
     }
 
-    public static String buildFileName(SystemTemplateMetadata templateMetadata) {
-        return "v" + templateMetadata.version() + File.separator + templateMetadata.name() + ".json";
+    static String buildFileName(SystemTemplateMetadata templateMetadata) {
+        return "v" + templateMetadata.version() + PathUtils.getDefaultFileSystem().getSeparator() + templateMetadata.name() + ".json";
     }
 
     // Visible for testing (if we need UTs with mocked resources)
