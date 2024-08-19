@@ -1,15 +1,40 @@
 {
   "repository_schema_version": 1,
   "templates": [
-      {
-        "name": "logs",
-        "version": 1,
-        "type": "@abc_template"
-      },
-      {
-        "name": "metrics",
-        "version": 1,
-        "type": "@abc_template"
-      }
+    {
+      "name": "logs",
+      "version": 1,
+      "type": "@abc_template"
+    },
+    {
+      "name": "metrics",
+      "version": 1,
+      "type": "@abc_template"
+    },
+    {
+      "name": "apache-web-logs",
+      "version": 1,
+      "type": "@abc_template"
+    },
+    {
+      "name": "aws-cloudtrail-logs",
+      "version": 1,
+      "type": "@abc_template"
+    },
+    {
+      "name": "aws-elb-logs",
+      "version": 1,
+      "type": "@abc_template"
+    },
+    {
+      "name": "aws-s3-logs",
+      "version": 1,
+      "type": "@abc_template"
+    },
+    {
+      "name": "nginx-logs",
+      "version": 1,
+      "type": "@abc_template"
+    }
   ]
 }
