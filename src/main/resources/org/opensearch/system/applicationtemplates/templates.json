@@ -17,17 +17,17 @@
       "type": "@abc_template"
     },
     {
-      "name": "aws-cloudtrail-logs",
+      "name": "amazon-cloudtrail-logs",
       "version": 1,
       "type": "@abc_template"
     },
     {
-      "name": "aws-elb-logs",
+      "name": "amazon-elb-logs",
       "version": 1,
       "type": "@abc_template"
     },
     {
-      "name": "aws-s3-logs",
+      "name": "amazon-s3-logs",
       "version": 1,
       "type": "@abc_template"
     },
