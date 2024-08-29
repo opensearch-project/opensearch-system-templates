@@ -35,6 +35,11 @@
       "name": "nginx-logs",
       "version": 1,
       "type": "@abc_template"
+    },
+    {
+      "name": "k8s-logs",
+      "version": 1,
+      "type": "@abc_template"
     }
   ]
 }

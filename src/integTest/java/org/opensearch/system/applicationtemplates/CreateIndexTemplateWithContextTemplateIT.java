@@ -45,7 +45,7 @@ import static org.opensearch.client.RestClientBuilder.DEFAULT_MAX_CONN_TOTAL;
 public class CreateIndexTemplateWithContextTemplateIT extends OpenSearchRestTestCase {
 
     @SuppressWarnings("unchecked")
-    public void testCreateIndexWithContextBasedTemplate() throws IOException {
+    public void testCreateIndexWithContextBasedTemplate() throws Exception {
 
         final String indexTemplate = "my-metrics-template";
         final String index = "my-metrics-1";

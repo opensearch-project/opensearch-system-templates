@@ -489,7 +489,8 @@
   },
   "_meta": {
     "_type": "@abc_template",
-    "_version": 1
+    "_version": 1,
+    "_schema_ref": "https://github.com/opensearch-project/opensearch-catalog/tree/main/integrations/observability/nginx/schemas"
   },
   "version": 1
 }

@@ -34,7 +34,7 @@ public class LocalSystemTemplateRepositoryTests extends OpenSearchTestCase {
             AtomicInteger counter = new AtomicInteger();
             repository.listTemplates().forEach(templateMetadata -> { counter.incrementAndGet(); });
 
-            assertEquals(counter.get(), 7);
+            assertEquals(counter.get(), 8);
         }
     }
 
