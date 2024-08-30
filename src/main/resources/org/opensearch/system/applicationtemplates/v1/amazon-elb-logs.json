@@ -687,7 +687,7 @@
   "_meta": {
     "_type": "@abc_template",
     "_version": 1,
-    "_schema_ref": "https://github.com/opensearch-project/opensearch-catalog/tree/main/integrations/observability/amazon_elb/schemas"
+    "_schema_ref": "https://github.com/opensearch-project/opensearch-catalog/blob/main/integrations/observability/amazon_elb/amazon_elb-1.0.0.json"
   },
   "version": 1
 }
