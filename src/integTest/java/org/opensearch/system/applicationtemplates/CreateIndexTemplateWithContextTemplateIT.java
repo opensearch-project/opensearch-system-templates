@@ -20,10 +20,14 @@ import org.apache.hc.core5.http.HttpHost;
 import org.apache.hc.core5.http.nio.ssl.TlsStrategy;
 import org.apache.hc.core5.reactor.ssl.TlsDetails;
 import org.apache.hc.core5.ssl.SSLContextBuilder;
+import org.opensearch.client.Request;
 import org.opensearch.client.RestClient;
 import org.opensearch.client.RestClientBuilder;
+import org.opensearch.cluster.metadata.IndexMetadata;
 import org.opensearch.common.settings.Settings;
 import org.opensearch.core.common.Strings;
+import org.opensearch.index.IndexSettings;
+import org.opensearch.index.engine.EngineConfig;
 import org.opensearch.test.rest.OpenSearchRestTestCase;
 
 import javax.net.ssl.SSLEngine;
@@ -32,6 +36,7 @@ import java.io.IOException;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
+import java.util.Map;
 import java.util.Objects;
 
 import static org.opensearch.client.RestClientBuilder.DEFAULT_MAX_CONN_PER_ROUTE;
@@ -39,8 +44,42 @@ import static org.opensearch.client.RestClientBuilder.DEFAULT_MAX_CONN_TOTAL;
 
 public class CreateIndexTemplateWithContextTemplateIT extends OpenSearchRestTestCase {
 
-    public void testCreateIndexWithContextBasedTemplate() throws IOException {
-        // TODO: Add E2E test with rest layer here.
+    @SuppressWarnings("unchecked")
+    public void testCreateIndexWithContextBasedTemplate() throws Exception {
+
+        final String indexTemplate = "my-metrics-template";
+        final String index = "my-metrics-1";
+
+        Request request = new Request("PUT", "/_index_template/" + indexTemplate);
+        String content = "{\n"
+            + "    \"index_patterns\": [\n"
+            + "        \"my-metrics-*\"\n"
+            + "    ],\n"
+            + "    \"context\": {\n"
+            + "        \"name\": \"metrics\"\n"
+            + "    }\n"
+            + "}";
+
+        request.setJsonEntity(content);
+
+        // Create index template
+        client().performRequest(request);
+
+        // creating index
+        createIndex(index, Settings.builder().put(IndexMetadata.SETTING_NUMBER_OF_REPLICAS, 0).build());
+
+        Map<String, Object> currentIndexSettings = (Map<String, Object>) ((Map<String, Object>) getIndexSettings(index).get(index)).get(
+            "settings"
+        );
+        assertEquals(currentIndexSettings.get(IndexSettings.INDEX_REFRESH_INTERVAL_SETTING.getKey()), "60s");
+        assertEquals(currentIndexSettings.get(IndexSettings.INDEX_MERGE_POLICY.getKey()), "log_byte_size");
+        assertEquals(currentIndexSettings.get(EngineConfig.INDEX_CODEC_SETTING.getKey()), "zstd_no_dict");
+
+        try {
+            ensureGreen(index);
+        } finally {
+            deleteIndex(index);
+        }
     }
 
     @Override
