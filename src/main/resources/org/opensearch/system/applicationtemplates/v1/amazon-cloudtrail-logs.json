@@ -1,0 +1,231 @@
+{
+  "template": {
+    "settings": {
+      "index": {
+        "mapping": {
+          "total_fields": {
+            "limit": "10000"
+          }
+        },
+        "codec": "zstd_no_dict",
+        "merge.policy": "log_byte_size",
+        "refresh_interval": "60s"
+      }
+    },
+    "mappings": {
+      "_meta": {
+        "correlations": [
+          {
+            "field": "spanId",
+            "foreign-field": "spanId",
+            "foreign-schema": "traces"
+          },
+          {
+            "field": "traceId",
+            "foreign-field": "traceId",
+            "foreign-schema": "traces"
+          }
+        ],
+        "labels": [
+          "log",
+          "aws",
+          "s3",
+          "cloud",
+          "cloudtrail"
+        ]
+      },
+      "_source": {
+        "enabled": true
+      },
+      "dynamic_templates": [
+        {
+          "resources_map": {
+            "path_match": "resource.*",
+            "mapping": {
+              "type": "keyword"
+            }
+          }
+        },
+        {
+          "attributes_map": {
+            "path_match": "attributes.*",
+            "mapping": {
+              "type": "keyword"
+            }
+          }
+        },
+        {
+          "instrumentation_scope_attributes_map": {
+            "path_match": "instrumentationScope.attributes.*",
+            "mapping": {
+              "type": "keyword"
+            }
+          }
+        }
+      ],
+      "properties": {
+        "severity": {
+          "properties": {
+            "number": {
+              "type": "long"
+            },
+            "text": {
+              "type": "text",
+              "fields": {
+                "keyword": {
+                  "ignore_above": 256,
+                  "type": "keyword"
+                }
+              }
+            }
+          }
+        },
+        "traceId": {
+          "ignore_above": 256,
+          "type": "keyword"
+        },
+        "spanId": {
+          "ignore_above": 256,
+          "type": "keyword"
+        },
+        "@message": {
+          "path": "body",
+          "type": "alias"
+        },
+        "@timestamp": {
+          "type": "date"
+        },
+        "instrumentationScope": {
+          "properties": {
+            "dropped_attributes_count": {
+              "type": "integer"
+            },
+            "name": {
+              "type": "text",
+              "fields": {
+                "keyword": {
+                  "ignore_above": 128,
+                  "type": "keyword"
+                }
+              }
+            },
+            "version": {
+              "type": "text",
+              "fields": {
+                "keyword": {
+                  "ignore_above": 256,
+                  "type": "keyword"
+                }
+              }
+            },
+            "schemaUrl": {
+              "type": "text",
+              "fields": {
+                "keyword": {
+                  "ignore_above": 256,
+                  "type": "keyword"
+                }
+              }
+            }
+          }
+        },
+        "attributes": {
+          "type": "object",
+          "properties": {
+            "data_stream": {
+              "properties": {
+                "namespace": {
+                  "ignore_above": 128,
+                  "type": "keyword"
+                },
+                "type": {
+                  "ignore_above": 56,
+                  "type": "keyword"
+                },
+                "dataset": {
+                  "ignore_above": 128,
+                  "type": "keyword"
+                }
+              }
+            }
+          }
+        },
+        "body": {
+          "type": "text"
+        },
+        "event": {
+          "properties": {
+            "result": {
+              "ignore_above": 256,
+              "type": "keyword"
+            },
+            "exception": {
+              "properties": {
+                "stacktrace": {
+                  "type": "text"
+                },
+                "message": {
+                  "ignore_above": 1024,
+                  "type": "keyword"
+                },
+                "type": {
+                  "ignore_above": 256,
+                  "type": "keyword"
+                }
+              }
+            },
+            "kind": {
+              "ignore_above": 256,
+              "type": "keyword"
+            },
+            "domain": {
+              "ignore_above": 256,
+              "type": "keyword"
+            },
+            "name": {
+              "ignore_above": 256,
+              "type": "keyword"
+            },
+            "source": {
+              "ignore_above": 256,
+              "type": "keyword"
+            },
+            "category": {
+              "ignore_above": 256,
+              "type": "keyword"
+            },
+            "type": {
+              "ignore_above": 256,
+              "type": "keyword"
+            }
+          }
+        },
+        "observedTimestamp": {
+          "type": "date"
+        },
+        "observerTime": {
+          "path": "observedTimestamp",
+          "type": "alias"
+        },
+        "schemaUrl": {
+          "type": "text",
+          "fields": {
+            "keyword": {
+              "ignore_above": 256,
+              "type": "keyword"
+            }
+          }
+        }
+      }
+    },
+    "aliases": {
+      "logs-cloudtrail": {}
+    }
+  },
+  "_meta": {
+    "_type": "@abc_template",
+    "_version": 1,
+    "_schema_ref": "https://github.com/opensearch-project/opensearch-catalog/blob/main/integrations/observability/aws_cloudtrail/aws_cloudtrail-1.0.0.json"
+  },
+  "version": 1
+}
