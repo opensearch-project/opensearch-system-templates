@@ -67,6 +67,10 @@ repositories {
     maven { url "https://aws.oss.sonatype.org/content/repositories/snapshots" }
 }
 
+configurations {
+    zipArchive
+}
+
 allprojects {
     group 'org.opensearch'
     version = opensearch_version.tokenize('-')[0] + '.0'
@@ -92,6 +96,7 @@ opensearchplugin {
 }
 
 dependencies {
+    zipArchive group: 'org.opensearch.plugin', name:'opensearch-custom-codecs', version: "3.0.0.0-SNAPSHOT"
 }
 
 allprojects {
@@ -148,6 +153,7 @@ publishing {
                 password "$System.env.SONATYPE_PASSWORD"
             }
         }
+        mavenLocal()
     }
 }
 
@@ -202,14 +208,27 @@ integTest {
     dependsOn "bundlePlugin"
     systemProperty 'tests.security.manager', 'true'
 
+
     systemProperty "https", System.getProperty("https")
     systemProperty "user", System.getProperty("user")
     systemProperty "password", System.getProperty("password")
 }
 
 testClusters.integTest {
-    testDistribution = "ARCHIVE"
+    testDistribution = "INTEG_TEST"
     plugin(project.tasks.bundlePlugin.archiveFile)
+    plugin(provider({
+        new RegularFile() {
+            @Override
+            File getAsFile() {
+                return configurations.zipArchive.asFileTree.matching {
+                    include '**/opensearch-custom-codecs*'
+                }.singleFile
+            }
+        }
+    }))
+    systemProperty 'opensearch.experimental.feature.application_templates.enabled', 'true'
+    setting 'cluster.application_templates.enabled', 'true'
 }
 
 tasks.withType(PublishToMavenRepository) {

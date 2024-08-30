@@ -14,7 +14,6 @@ import org.opensearch.cluster.applicationtemplates.SystemTemplate;
 import org.opensearch.cluster.applicationtemplates.SystemTemplateMetadata;
 import org.opensearch.cluster.applicationtemplates.SystemTemplateRepository;
 import org.opensearch.cluster.applicationtemplates.TemplateRepositoryMetadata;
-import org.opensearch.common.io.PathUtils;
 import org.opensearch.common.util.io.Streams;
 import org.opensearch.common.xcontent.json.JsonXContent;
 import org.opensearch.core.common.bytes.BytesArray;
@@ -131,7 +130,7 @@ public class LocalSystemTemplateRepository implements SystemTemplateRepository {
     }
 
     static String buildFileName(SystemTemplateMetadata templateMetadata) {
-        return "v" + templateMetadata.version() + PathUtils.getDefaultFileSystem().getSeparator() + templateMetadata.name() + ".json";
+        return "v" + templateMetadata.version() + "/" + templateMetadata.name() + ".json";
     }
 
     // Visible for testing (if we need UTs with mocked resources)

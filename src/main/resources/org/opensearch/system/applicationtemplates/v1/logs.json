@@ -1,7 +1,7 @@
 {
   "template": {
     "settings": {
-      "codec": "best_compression",
+      "codec": "zstd_no_dict",
       "merge.policy": "log_byte_size",
       "refresh_interval": "60s"
     }
