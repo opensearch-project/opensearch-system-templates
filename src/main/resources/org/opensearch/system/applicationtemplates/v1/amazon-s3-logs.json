@@ -1,0 +1,424 @@
+{
+  "template": {
+    "settings": {
+      "index": {
+        "mapping": {
+          "total_fields": {
+            "limit": "10000"
+          }
+        },
+        "codec": "zstd_no_dict",
+        "merge.policy": "log_byte_size",
+        "refresh_interval": "60s"
+      }
+    },
+    "mappings": {
+      "_meta": {
+        "correlations": [
+          {
+            "field": "spanId",
+            "foreign-field": "spanId",
+            "foreign-schema": "traces"
+          },
+          {
+            "field": "traceId",
+            "foreign-field": "traceId",
+            "foreign-schema": "traces"
+          }
+        ],
+        "labels": [
+          "aws",
+          "s3",
+          "cloud",
+          "log"
+        ]
+      },
+      "dynamic_templates": [
+        {
+          "resources_map": {
+            "path_match": "resource.*",
+            "mapping": {
+              "type": "keyword"
+            }
+          }
+        },
+        {
+          "attributes_map": {
+            "path_match": "attributes.*",
+            "mapping": {
+              "type": "keyword"
+            }
+          }
+        },
+        {
+          "instrumentation_scope_attributes_map": {
+            "path_match": "instrumentationScope.attributes.*",
+            "mapping": {
+              "type": "keyword"
+            }
+          }
+        }
+      ],
+      "properties": {
+        "@message": {
+          "type": "alias",
+          "path": "body"
+        },
+        "@timestamp": {
+          "type": "date"
+        },
+        "aws": {
+          "properties": {
+            "s3": {
+              "properties": {
+                "authentication_type": {
+                  "type": "keyword"
+                },
+                "bucket": {
+                  "type": "text",
+                  "fields": {
+                    "keyword": {
+                      "type": "keyword",
+                      "ignore_above": 256
+                    }
+                  }
+                },
+                "bucket_owner": {
+                  "type": "keyword"
+                },
+                "bytes_sent": {
+                  "type": "long"
+                },
+                "cipher_suite": {
+                  "type": "text",
+                  "fields": {
+                    "keyword": {
+                      "type": "keyword",
+                      "ignore_above": 256
+                    }
+                  }
+                },
+                "copy_source": {
+                  "type": "keyword"
+                },
+                "delete": {
+                  "type": "keyword"
+                },
+                "error_code": {
+                  "type": "keyword"
+                },
+                "host_header": {
+                  "type": "text",
+                  "fields": {
+                    "keyword": {
+                      "type": "keyword",
+                      "ignore_above": 256
+                    }
+                  }
+                },
+                "host_id": {
+                  "type": "text",
+                  "fields": {
+                    "keyword": {
+                      "type": "keyword",
+                      "ignore_above": 256
+                    }
+                  }
+                },
+                "http_status": {
+                  "type": "keyword"
+                },
+                "key": {
+                  "type": "text",
+                  "fields": {
+                    "keyword": {
+                      "type": "keyword",
+                      "ignore_above": 256
+                    }
+                  }
+                },
+                "object_size": {
+                  "type": "long"
+                },
+                "operation": {
+                  "type": "keyword"
+                },
+                "part_number": {
+                  "type": "keyword"
+                },
+                "referrer": {
+                  "type": "text",
+                  "fields": {
+                    "keyword": {
+                      "type": "keyword",
+                      "ignore_above": 256
+                    }
+                  }
+                },
+                "remote_ip": {
+                  "type": "text",
+                  "fields": {
+                    "keyword": {
+                      "type": "keyword",
+                      "ignore_above": 256
+                    }
+                  }
+                },
+                "request_id": {
+                  "type": "text",
+                  "fields": {
+                    "keyword": {
+                      "type": "keyword",
+                      "ignore_above": 256
+                    }
+                  }
+                },
+                "request_uri": {
+                  "type": "text",
+                  "fields": {
+                    "keyword": {
+                      "type": "keyword",
+                      "ignore_above": 256
+                    }
+                  }
+                },
+                "requester": {
+                  "type": "text",
+                  "fields": {
+                    "keyword": {
+                      "type": "keyword",
+                      "ignore_above": 256
+                    }
+                  }
+                },
+                "signature_version": {
+                  "type": "keyword"
+                },
+                "tls_version": {
+                  "type": "keyword"
+                },
+                "total_time": {
+                  "type": "integer"
+                },
+                "turn_around_time": {
+                  "type": "integer"
+                },
+                "upload_id": {
+                  "type": "keyword"
+                },
+                "user_agent": {
+                  "type": "text",
+                  "fields": {
+                    "keyword": {
+                      "type": "keyword",
+                      "ignore_above": 256
+                    }
+                  }
+                },
+                "version_id": {
+                  "type": "keyword"
+                }
+              }
+            }
+          }
+        },
+        "body": {
+          "type": "text"
+        },
+        "cloud": {
+          "properties": {
+            "account": {
+              "properties": {
+                "id": {
+                  "type": "keyword"
+                },
+                "name": {
+                  "type": "keyword"
+                }
+              }
+            },
+            "availability_zone": {
+              "type": "keyword"
+            },
+            "instance": {
+              "properties": {
+                "id": {
+                  "type": "keyword"
+                },
+                "name": {
+                  "type": "keyword"
+                }
+              }
+            },
+            "machine": {
+              "properties": {
+                "type": {
+                  "type": "keyword"
+                }
+              }
+            },
+            "platform": {
+              "type": "keyword"
+            },
+            "project": {
+              "properties": {
+                "id": {
+                  "type": "keyword"
+                },
+                "name": {
+                  "type": "keyword"
+                }
+              }
+            },
+            "provider": {
+              "type": "keyword"
+            },
+            "region": {
+              "type": "keyword"
+            },
+            "resource_id": {
+              "type": "keyword"
+            },
+            "service": {
+              "properties": {
+                "name": {
+                  "type": "keyword"
+                }
+              }
+            }
+          }
+        },
+        "event": {
+          "properties": {
+            "category": {
+              "type": "keyword",
+              "ignore_above": 256
+            },
+            "domain": {
+              "type": "keyword",
+              "ignore_above": 256
+            },
+            "exception": {
+              "properties": {
+                "message": {
+                  "type": "keyword",
+                  "ignore_above": 1024
+                },
+                "stacktrace": {
+                  "type": "text"
+                },
+                "type": {
+                  "type": "keyword",
+                  "ignore_above": 256
+                }
+              }
+            },
+            "kind": {
+              "type": "keyword",
+              "ignore_above": 256
+            },
+            "name": {
+              "type": "keyword",
+              "ignore_above": 256
+            },
+            "result": {
+              "type": "keyword",
+              "ignore_above": 256
+            },
+            "source": {
+              "type": "keyword",
+              "ignore_above": 256
+            },
+            "type": {
+              "type": "keyword",
+              "ignore_above": 256
+            }
+          }
+        },
+        "instrumentationScope": {
+          "properties": {
+            "dropped_attributes_count": {
+              "type": "integer"
+            },
+            "name": {
+              "type": "text",
+              "fields": {
+                "keyword": {
+                  "type": "keyword",
+                  "ignore_above": 128
+                }
+              }
+            },
+            "schemaUrl": {
+              "type": "text",
+              "fields": {
+                "keyword": {
+                  "type": "keyword",
+                  "ignore_above": 256
+                }
+              }
+            },
+            "version": {
+              "type": "text",
+              "fields": {
+                "keyword": {
+                  "type": "keyword",
+                  "ignore_above": 256
+                }
+              }
+            }
+          }
+        },
+        "observedTimestamp": {
+          "type": "date"
+        },
+        "observerTime": {
+          "type": "alias",
+          "path": "observedTimestamp"
+        },
+        "schemaUrl": {
+          "type": "text",
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "ignore_above": 256
+            }
+          }
+        },
+        "severity": {
+          "properties": {
+            "number": {
+              "type": "long"
+            },
+            "text": {
+              "type": "text",
+              "fields": {
+                "keyword": {
+                  "type": "keyword",
+                  "ignore_above": 256
+                }
+              }
+            }
+          }
+        },
+        "spanId": {
+          "type": "keyword",
+          "ignore_above": 256
+        },
+        "traceId": {
+          "type": "keyword",
+          "ignore_above": 256
+        }
+      }
+    },
+    "aliases": {
+      "logs-aws-s3": {}
+    }
+  },
+  "_meta": {
+    "_type": "@abc_template",
+    "_version": 1,
+    "_schema_ref": "https://github.com/opensearch-project/opensearch-catalog/blob/main/integrations/observability/amazon_s3/amazon_s3-1.0.0.json"
+  },
+  "version": 1
+}
