@@ -96,7 +96,7 @@ opensearchplugin {
 }
 
 dependencies {
-    zipArchive group: 'org.opensearch.plugin', name:'opensearch-custom-codecs', version: "2.17.0.0-SNAPSHOT"
+    zipArchive group: 'org.opensearch.plugin', name:'opensearch-custom-codecs', version: "2.17.1.0-SNAPSHOT"
 }
 
 allprojects {
