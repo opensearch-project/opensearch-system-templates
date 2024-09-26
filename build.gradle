@@ -34,6 +34,13 @@ buildscript {
         opensearch_version = System.getProperty("opensearch.version", "2.17.0-SNAPSHOT")
         isSnapshot = "true" == System.getProperty("build.snapshot", "true")
         buildVersionQualifier = System.getProperty("build.version_qualifier", "")
+        plugin_version = opensearch_version.tokenize('-')[0] + '.0'
+        if (buildVersionQualifier) {
+            plugin_version += "-${buildVersionQualifier}"
+        }
+        if (isSnapshot) {
+            plugin_version += "-SNAPSHOT"
+        }
     }
 
     repositories {
@@ -73,13 +80,7 @@ configurations {
 
 allprojects {
     group 'org.opensearch'
-    version = opensearch_version.tokenize('-')[0] + '.0'
-    if (buildVersionQualifier) {
-        version += "-${buildVersionQualifier}"
-    }
-    if (isSnapshot) {
-        version += "-SNAPSHOT"
-    }
+    version plugin_version
 
     java {
         targetCompatibility = JavaVersion.VERSION_11
@@ -96,7 +97,7 @@ opensearchplugin {
 }
 
 dependencies {
-    zipArchive group: 'org.opensearch.plugin', name:'opensearch-custom-codecs', version: "2.17.0.0-SNAPSHOT"
+    zipArchive group: 'org.opensearch.plugin', name:'opensearch-custom-codecs', version: plugin_version
 }
 
 allprojects {
