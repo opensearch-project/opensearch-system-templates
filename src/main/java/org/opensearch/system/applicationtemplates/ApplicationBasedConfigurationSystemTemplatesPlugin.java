@@ -8,7 +8,7 @@
 
 package org.opensearch.system.applicationtemplates;
 
-import org.opensearch.client.Client;
+import org.opensearch.transport.client.Client;
 import org.opensearch.cluster.applicationtemplates.ClusterStateSystemTemplateLoader;
 import org.opensearch.cluster.applicationtemplates.SystemTemplateLoader;
 import org.opensearch.cluster.applicationtemplates.SystemTemplateMetadata;
