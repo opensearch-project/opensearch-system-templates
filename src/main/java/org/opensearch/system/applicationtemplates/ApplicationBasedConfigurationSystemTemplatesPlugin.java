@@ -8,7 +8,6 @@
 
 package org.opensearch.system.applicationtemplates;
 
-import org.opensearch.transport.client.Client;
 import org.opensearch.cluster.applicationtemplates.ClusterStateSystemTemplateLoader;
 import org.opensearch.cluster.applicationtemplates.SystemTemplateLoader;
 import org.opensearch.cluster.applicationtemplates.SystemTemplateMetadata;
@@ -24,6 +23,7 @@ import org.opensearch.plugins.Plugin;
 import org.opensearch.repositories.RepositoriesService;
 import org.opensearch.script.ScriptService;
 import org.opensearch.threadpool.ThreadPool;
+import org.opensearch.transport.client.Client;
 import org.opensearch.watcher.ResourceWatcherService;
 
 import java.io.IOException;
