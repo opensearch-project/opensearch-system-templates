@@ -252,7 +252,9 @@ jacocoTestReport {
     }
 }
 
-check.dependsOn jacocoTestReport
+test {
+    finalizedBy jacocoTestReport // report is always generated after tests run
+}
 
 task updateVersion {
     onlyIf { System.getProperty('newVersion') }
