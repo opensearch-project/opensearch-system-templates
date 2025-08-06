@@ -252,6 +252,8 @@ jacocoTestReport {
     }
 }
 
+check.dependsOn jacocoTestReport
+
 task updateVersion {
     onlyIf { System.getProperty('newVersion') }
     doLast {
