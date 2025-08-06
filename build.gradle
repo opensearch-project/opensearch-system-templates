@@ -244,6 +244,14 @@ tasks.withType(PublishToMavenRepository) {
     }
 }
 
+jacocoTestReport {
+    dependsOn integTest, test
+    reports {
+        xml.required = true
+        html.required = true
+    }
+}
+
 task updateVersion {
     onlyIf { System.getProperty('newVersion') }
     doLast {
