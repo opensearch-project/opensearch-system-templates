@@ -46,8 +46,8 @@ buildscript {
     repositories {
         mavenLocal()
         mavenCentral()
-        maven { url "https://ci.opensearch.org/ci/dbc/snapshots/maven/" }
-        maven { url "https://plugins.gradle.org/m2/" }
+        maven { url = "https://ci.opensearch.org/ci/dbc/snapshots/maven/" }
+        maven { url = "https://plugins.gradle.org/m2/" }
     }
 
     dependencies {
@@ -71,8 +71,8 @@ apply plugin: 'opensearch.java-agent'
 repositories {
     mavenLocal()
     mavenCentral()
-    maven { url "https://plugins.gradle.org/m2/" }
-    maven { url "https://ci.opensearch.org/ci/dbc/snapshots/maven/" }
+    maven { url = "https://plugins.gradle.org/m2/" }
+    maven { url = "https://ci.opensearch.org/ci/dbc/snapshots/maven/" }
 }
 
 configurations {
@@ -80,8 +80,8 @@ configurations {
 }
 
 allprojects {
-    group 'org.opensearch'
-    version plugin_version
+    group = 'org.opensearch'
+    version = plugin_version
 
     java {
         targetCompatibility = JavaVersion.VERSION_21
@@ -90,15 +90,15 @@ allprojects {
 }
 
 opensearchplugin {
-    name 'opensearch-system-templates'
-    description 'OpenSearch plugin that provides basic application based configuration templates.'
-    classname 'org.opensearch.system.applicationtemplates.ApplicationBasedConfigurationSystemTemplatesPlugin'
-    licenseFile rootProject.file('LICENSE')
-    noticeFile rootProject.file('NOTICE')
+    name = 'opensearch-system-templates'
+    description = 'OpenSearch plugin that provides basic application based configuration templates.'
+    classname = 'org.opensearch.system.applicationtemplates.ApplicationBasedConfigurationSystemTemplatesPlugin'
+    licenseFile = rootProject.file('LICENSE')
+    noticeFile = rootProject.file('NOTICE')
 }
 
 dependencies {
-    zipArchive group: 'org.opensearch.plugin', name:'opensearch-custom-codecs', version: plugin_version
+    zipArchive "org.opensearch.plugin:opensearch-custom-codecs:${plugin_version}"
 }
 
 allprojects {
