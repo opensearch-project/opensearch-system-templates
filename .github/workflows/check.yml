@@ -13,7 +13,7 @@ jobs:
       matrix:
         java: [ 11, 17, 21 ]
     if: github.repository == 'opensearch-project/opensearch-system-templates'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     container:
       # using the same image which is used by opensearch-build team to build the OpenSearch Distribution
       # this image tag is subject to change as more dependencies and updates will arrive over time
@@ -41,7 +41,7 @@ jobs:
     strategy:
       matrix:
         java: [ 11, 17, 21 ]
-        os: [windows-latest, macos-13]
+        os: [windows-latest, macos-14]
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
