@@ -54,12 +54,17 @@ buildscript {
     dependencies {
         classpath "${opensearch_group}.gradle:build-tools:${opensearch_version}"
         classpath "org.jacoco:org.jacoco.agent:0.8.5"
+        // Spotless 8.10.x requires a Java 17+ runtime to resolve its plugin. Only put it on the
+        // buildscript classpath on Java 17+ so the Java 11 CI matrix doesn't fail resolving it.
+        // formatting.gradle applies it (also gated to Java 17+) only when it is available.
+        if (JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_17)) {
+            classpath "com.diffplug.spotless:spotless-plugin-gradle:8.10.1"
+        }
     }
 }
 
 plugins {
     id 'java'
-    id 'com.diffplug.spotless' version '8.10.1'
 }
 
 apply plugin: 'opensearch.opensearchplugin'
